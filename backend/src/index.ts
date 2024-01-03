@@ -2,13 +2,17 @@ import "./config/environment/env.config";
 import Express from "express";
 import connectDB from "./config/db/db.config";
 import { ExampleRouter } from "./routers/Example/example.routes";
+import { UserRouter } from "./routers/users/user.routes";
+import cookieParser from "cookie-parser";
 
 const App = Express();
 
 App.use(Express.urlencoded({ extended: true }));
 App.use(Express.json());
+App.use(cookieParser());
 
 App.use(ExampleRouter);
+App.use(UserRouter);
 
 connectDB();
 App.listen(process.env.SERVER_PORT, () =>

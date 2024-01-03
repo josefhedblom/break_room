@@ -7,6 +7,8 @@ interface IUserInput extends Document {
   username: string;
   email: string;
   password: string;
+  emailVerificationToken: string;
+  isVerified: boolean;
 }
 
 interface IUserDocument extends IUserInput, Mongoose.Document {
@@ -33,6 +35,13 @@ const UserSchema: Schema = new Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: [8, "Password must be a minimun length of 8 characters"],
+    },
+    emailVerificationToken: {
+      type: String,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   {
