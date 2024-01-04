@@ -3,6 +3,8 @@ import emailVerfication from "../helpers/EmailVerfication.helper";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../models/user.model";
+import sendEmailVarifactionLink from "../helpers/SendEmailVerification.helper";
+import { EMAIL_VERIFY_HTML, EMIL_VERIFRED_HTML } from "../helpers/EmailTemplate.helper";
 
 export const account = async (req: Request, res: Response) => {
   try {
@@ -23,10 +25,9 @@ export const createUser = async (req: Request, res: Response) => {
       password,
       emailVerificationToken: emailVerfication.token,
     });
-    return res.status(201).json({
-      message: "Account created! Please verify by the verification email.",
-      emailVerfication: emailVerfication.verificationLink,
-    });
+    sendEmailVarifactionLink(emailVerfication.verificationLink);
+
+    res.send(EMAIL_VERIFY_HTML(emailVerfication.verificationLink)); // TODO: change back to res.status(201).json({ message: "Account created! Please verify by the verification email.",emailVerfication: emailVerfication.verificationLink,});
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error });
@@ -46,8 +47,9 @@ export const verifyUser = async (req: Request, res: Response) => {
         message: "Could not verify the account, please contact our support, support@support.com",
       });
     }
-    return res.status(200).json({ message: "Account verifiyed" });
+    res.send(EMIL_VERIFRED_HTML()); // TODO: change back to return res.status(200).json({ message: "Account verifiyed" });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error });
   }
 };
